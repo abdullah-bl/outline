@@ -1,0 +1,46 @@
+{
+  "private": true,
+  "sideEffects": false,
+  "scripts": {
+    "start": "remix-serve build",
+    "build": "npm run build:css && remix build",
+    "build:css": "tailwindcss -m -i ./styles/app.css -o app/styles/app.css",
+    "dev": "concurrently \"npm run dev:css\" \"remix dev\"",
+    "dev:css": "tailwindcss -w -i ./styles/app.css -o app/styles/app.css",
+    "db:seed": "npx prisma db seed"
+  },
+  "prisma": {
+    "seed": "node --require esbuild-register prisma/seed.ts"
+  },
+  "dependencies": {
+    "@prisma/client": "latest",
+    "@radix-ui/react-icons": "latest",
+    "@remix-run/node": "latest",
+    "@remix-run/react": "latest",
+    "@remix-run/serve": "latest",
+    "date-fns": "^2.28.0",
+    "react": "latest",
+    "react-dom": "latest"
+  },
+  "devDependencies": {
+    "@remix-run/dev": "^1.6.3",
+    "@remix-run/eslint-config": "^1.6.3",
+    "@tailwindcss/aspect-ratio": "^0.4.0",
+    "@tailwindcss/forms": "^0.5.2",
+    "@tailwindcss/line-clamp": "^0.4.0",
+    "@tailwindcss/typography": "^0.5.2",
+    "@types/nedb": "^1.8.12",
+    "@types/react": "^17.0.47",
+    "@types/react-dom": "^17.0.17",
+    "autoprefixer": "^10.4.7",
+    "concurrently": "^7.2.2",
+    "esbuild-register": "^3.3.3",
+    "eslint": "^8.15.0",
+    "postcss": "^8.4.14",
+    "tailwindcss": "^3.1.4",
+    "typescript": "^4.6.4"
+  },
+  "engines": {
+    "node": ">=14"
+  }
+}

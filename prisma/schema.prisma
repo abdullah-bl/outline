@@ -1,0 +1,159 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Category {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now())
+  items       Item[]
+
+  @@index([title])
+}
+
+model Item {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  number      String
+  budget      Int      @default(0)
+  cash        Int      @default(0)
+  cost        Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  category    Category @relation(fields: [categoryId], references: [id])
+  categoryId  String
+
+  projects Project[]
+  history  ItemHistory[]
+
+  @@index([title, number])
+}
+
+model ItemHistory {
+  id          String   @id @default(uuid())
+  itemId      String
+  item        Item     @relation(fields: [itemId], references: [id])
+  statusId    String
+  status      Status   @relation(fields: [statusId], references: [id])
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([itemId, statusId])
+}
+
+model Project {
+  id          String           @id @default(uuid())
+  title       String
+  description String?
+  cost        Int              @default(0)
+  item        Item?            @relation(fields: [itemId], references: [id])
+  itemId      String?
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  history     ProjectHistory[]
+  documents   Document[]
+
+  @@index([title])
+}
+
+model ProjectHistory {
+  id          String   @id @default(uuid())
+  project     Project  @relation(fields: [projectId], references: [id])
+  projectId   String
+  statusId    String
+  status      Status   @relation(fields: [statusId], references: [id])
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([projectId, statusId])
+}
+
+model Status {
+  id          String   @id @default(uuid())
+  title       String   @unique
+  description String   @default("")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  projects ProjectHistory[]
+  items    ItemHistory[]
+
+  @@index([title])
+}
+
+model User {
+  id        String     @id @default(uuid())
+  name      String
+  username  String     @unique
+  password  String?
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @default(now())
+  posts     Post[]
+  comments  Comment[]
+  Document  Document[]
+}
+
+model Post {
+  id        String    @id @default(uuid())
+  title     String
+  content   String
+  pinned    Boolean   @default(false)
+  authorId  String?
+  author    User?     @relation(fields: [authorId], references: [id])
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now())
+  comments  Comment[]
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  pinned    Boolean? @default(false)
+  content   String
+  authorId  String?
+  author    User?    @relation(fields: [authorId], references: [id])
+  postId    String
+  post      Post     @relation(fields: [postId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+}
+
+model Document {
+  id        String   @id @default(uuid())
+  title     String
+  content   String?
+  file      String?
+  authorId  String?
+  author    User?    @relation(fields: [authorId], references: [id])
+  Project   Project? @relation(fields: [projectId], references: [id])
+  projectId String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([title, projectId])
+}
+
+model Transfer {
+  id        String   @id @default(uuid())
+  cash      Int      @default(0)
+  cost      Int      @default(0)
+  quarter   Int      @default(1)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  from      String
+  to        String
+
+  @@index([from, to, quarter])
+}

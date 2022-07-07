@@ -1,0 +1,71 @@
+Arguments: 
+  /Users/dev/.nvm/versions/node/v18.4.0/bin/node /Users/dev/.yarn/bin/yarn.js
+
+PATH: 
+  /Users/dev/Library/pnpm:/Users/dev/.bun/bin:/opt/homebrew/opt/python@3.10/bin:/Users/dev/.yarn/bin:/Users/dev/.config/yarn/global/node_modules/.bin:/Users/dev/miniforge3/bin:/Users/dev/.deno/bin:/opt/homebrew/sbin:/Users/dev/.nvm/versions/node/v18.4.0/bin:/opt/homebrew/opt/icu4c/sbin:/opt/homebrew/opt/icu4c/bin:/opt/homebrew/bin:/Library/Frameworks/Python.framework/Versions/2.7/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/Library/Frameworks/Python.framework/Versions/3.10/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin:/Library/Apple/usr/bin:/Users/dev/.cargo/bin:/Users/dev/.yarn/bin
+
+Yarn version: 
+  1.22.18
+
+Node version: 
+  18.4.0
+
+Platform: 
+  darwin arm64
+
+Trace: 
+  Error: ENOENT: no such file or directory, copyfile '/Users/dev/Library/Caches/Yarn/v6/npm-ms-2.1.2-d09d1f357b443f493382a8eb3ccd183872ae6009-integrity/node_modules/ms/license.md' -> '/Users/dev/Dev/Web/outline/node_modules/@eslint/eslintrc/node_modules/ms/license.md'
+
+npm manifest: 
+  {
+    "private": true,
+    "sideEffects": false,
+    "scripts": {
+      "start": "remix-serve build",
+      "build": "npm run build:css && remix build",
+      "build:css": "tailwindcss -m -i ./styles/app.css -o app/styles/app.css",
+      "dev": "concurrently \"npm run dev:css\" \"remix dev\"",
+      "dev:css": "tailwindcss -w -i ./styles/app.css -o app/styles/app.css",
+      "db:seed": "npx prisma db seed"
+    },
+    "prisma": {
+      "seed": "node --require esbuild-register prisma/seed.ts"
+    },
+    "dependencies": {
+      "@prisma/client": "^4.0.0",
+      "@radix-ui/react-icons": "^1.1.1",
+      "@remix-run/node": "^1.6.3",
+      "@remix-run/react": "^1.6.3",
+      "@remix-run/serve": "^1.6.3",
+      "date-fns": "^2.28.0",
+      "react": "^17.0.2",
+      "react-dom": "^17.0.2"
+    },
+    "devDependencies": {
+      "@remix-run/dev": "^1.6.3",
+      "@remix-run/eslint-config": "^1.6.3",
+      "@tailwindcss/aspect-ratio": "^0.4.0",
+      "@tailwindcss/forms": "^0.5.2",
+      "@tailwindcss/line-clamp": "^0.4.0",
+      "@tailwindcss/typography": "^0.5.2",
+      "@types/nedb": "^1.8.12",
+      "@types/react": "^17.0.45",
+      "@types/react-dom": "^17.0.17",
+      "autoprefixer": "^10.4.7",
+      "concurrently": "^7.2.2",
+      "esbuild-register": "^3.3.3",
+      "eslint": "^8.15.0",
+      "postcss": "^8.4.14",
+      "tailwindcss": "^3.1.4",
+      "typescript": "^4.6.4"
+    },
+    "engines": {
+      "node": ">=14"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
