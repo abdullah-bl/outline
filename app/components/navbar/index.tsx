@@ -12,7 +12,7 @@ import { NavbarItem } from './NavbarItem'
 export default function Navbar() {
 	const { pathname } = useLocation()
 	return (
-		<div className='container mx-auto flex flex-col md:flex-row items-center justify-between py-3 select-none'>
+		<div className='container dark:bg-black  mx-auto flex flex-col md:flex-row items-center justify-between py-3 select-none sticky top-10'>
 			<nav className='w-full py-2'>
 				<ul className='flex space-x-4'>
 					<NavbarItem

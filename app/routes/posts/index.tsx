@@ -2,6 +2,7 @@ import type { Post } from '@prisma/client'
 import { LapTimerIcon, LetterCaseToggleIcon } from '@radix-ui/react-icons'
 import type { LoaderFunction } from '@remix-run/node'
 import { Link, useLoaderData } from '@remix-run/react'
+import { LinkButton } from '~/components/buttons'
 import { Container } from '~/components/container'
 import Navbar from '~/components/navbar'
 import Posts from '~/components/posts'
@@ -29,9 +30,7 @@ export default function Index() {
 			<Container>
 				<Heading>All Posts</Heading>
 				<div className='my-4'>
-					<Link to={'/posts/new'} className='font-mono font-bold text-blue-800'>
-						<span>Write a Post</span>
-					</Link>
+					<LinkButton to='/posts/new'>Write New Post</LinkButton>
 				</div>
 				<div className='w-full overflow-scroll h-full scroll-smooth'>
 					<Posts posts={posts} />

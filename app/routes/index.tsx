@@ -31,25 +31,35 @@ export default function Index() {
 			<Container>
 				<Heading>Welcome to Outline</Heading>
 				<small className='font-mono'> News & Important </small>
-				<h1 className='font-bold text-3xl font-mono border-t-2 border-gray-900'>
-					Latest Posts
-				</h1>
-				<p>
-					<Link to={'/posts/new'} className='font-mono font-bold text-blue-800'>
-						Write a Post
-					</Link>
-				</p>
-				<Posts posts={posts} />
-				{count > 4 && (
-					<p className='font-mono'>
-						<Link
-							to={'/posts'}
-							className='font-mono font-bold text-blue-800 dark:text-white'
-						>
-							See all posts
-						</Link>
-					</p>
-				)}
+
+				<div className='flex items-baseline gap-2'>
+					<div className='w-1/2'>
+						{/* render latest posts */}
+						<Heading className='font-bold text-xl font-mono border-t-2 border-gray-900'>
+							Latest Posts
+						</Heading>
+						<div className='flex items-center gap-2 my-4'>
+							<Link
+								to={'/posts/new'}
+								className='font-bold hover:border-black  uppercase rounded-md border py-1 px-4'
+							>
+								Write New Post
+							</Link>
+						</div>
+						<Posts posts={posts} />
+						{count > 4 && (
+							<p className='font-mono'>
+								<Link
+									to={'/posts'}
+									className='font-mono font-bold text-blue-800 dark:text-white'
+								>
+									See all posts
+								</Link>
+							</p>
+						)}
+					</div>
+					<div className='w-1/2'>{/* render top projects... */}</div>
+				</div>
 			</Container>
 		</>
 	)

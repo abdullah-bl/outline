@@ -9,7 +9,7 @@ export default function Header() {
 					to='/'
 					className='dark:text-white text-slate-900  font-bold text-xl md:text-2xl flex items-center gap-2'
 				>
-					<ShadowIcon width={32} height={32} />
+					<ShadowIcon width={32} height={32} color='white' />
 				</Link>
 			</div>
 		</header>

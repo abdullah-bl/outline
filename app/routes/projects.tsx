@@ -3,6 +3,7 @@ import { DimensionsIcon } from '@radix-ui/react-icons'
 import type { LoaderFunction } from '@remix-run/node'
 import { json } from '@remix-run/node'
 import { Link, Outlet, useLoaderData } from '@remix-run/react'
+import { LinkButton } from '~/components/buttons'
 import { Container } from '~/components/container'
 import Navbar from '~/components/navbar'
 import Projects from '~/components/projects'
@@ -33,12 +34,7 @@ export default function Index() {
 					All Your Project & Sorted By Date
 				</small>
 				<div className='flex items-center gap-2 my-4'>
-					<Link
-						to='/projects/new'
-						className='font-bold hover:border-black  uppercase rounded-md border py-1 px-4'
-					>
-						Create a new project
-					</Link>
+					<LinkButton to='/projects/new'>Create a new project</LinkButton>
 				</div>
 				<hr />
 				<div className='flex items-baseline gap-2'>
