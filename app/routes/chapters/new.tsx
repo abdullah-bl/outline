@@ -1,27 +1,27 @@
 import { redirect } from '@remix-run/node'
 import { Form } from '@remix-run/react'
-import { Container } from '~/components/container'
-import Navbar from '~/components/navbar'
 import { db } from '~/utils/db.server'
-import type { ActionFunction } from '@remix-run/node'
+import type { ActionFunction, LoaderFunction } from '@remix-run/node'
 
 export const action: ActionFunction = async ({ request }) => {
 	const body = await request.formData()
 	const title = body.get('title') as string
 	const description = body.get('description') as string
-	const category = await db.category.create({
+	const category = await db.chapter.create({
 		data: {
 			title,
 			description,
 		},
 	})
-	return redirect(`/categories/${category.id}`)
+	return redirect(`/chapters/${category.id}`)
 }
+
+export const loader: LoaderFunction = async () => {}
 
 export default function NewPost() {
 	return (
 		<div className='w-full'>
-			<h1 className='font-bold font-mono'> New Category </h1>
+			<h1 className='font-bold font-mono'> New Chapter </h1>
 			<Form method='post'>
 				<div className='w-full p-2'>
 					<label htmlFor='name' className=' block '>
@@ -35,6 +35,20 @@ export default function NewPost() {
 						className='rounded-lg w-fit'
 						required
 					/>
+				</div>
+				<div className='w-full p-2'>
+					<label htmlFor='year' className=' block '>
+						Select Year
+					</label>
+					<select
+						id='year'
+						name='year'
+						placeholder='wite post title here...'
+						className='rounded-lg w-fit'
+						required
+					>
+						<option value='2020'>2020</option>
+					</select>
 				</div>
 				<div className='w-full p-2'>
 					<label htmlFor='description' className=' block '>

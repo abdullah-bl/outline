@@ -1,6 +1,7 @@
 import type { LoaderFunction } from '@remix-run/node'
 import { json } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
+import { formatDate, formatPastToNow } from '~/lib/formatDate'
 import { db } from '~/utils/db.server'
 
 type LoaderData = Awaited<ReturnType<typeof getLoaderData>>
@@ -19,14 +20,14 @@ export default function Index() {
 	const comments = useLoaderData<LoaderData>()
 	return (
 		<div className='p-2'>
-			<h1> Comments ({comments.length}) </h1>
+			<h1 className='font-mono font-semibold'>Comments ({comments.length})</h1>
 			{comments?.map((comment) => (
-				<div key={comment.id}>
-					<p>{comment.content}</p>
-					<p>
-						<small>{comment.createdAt}</small>
-					</p>
-					<hr />
+				<div key={comment.id} className='p-2 border-t my-2'>
+					<p className=' text-base '>{comment.content}</p>
+					<small>
+						Created At : {formatDate(comment?.createdAt)} (
+						{formatPastToNow(comment?.createdAt)})
+					</small>
 				</div>
 			))}
 		</div>

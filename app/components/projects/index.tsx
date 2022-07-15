@@ -19,7 +19,7 @@ export default function Projects({ projects }: { projects: Project[] }) {
 					} `}
 				>
 					<Link to={`/projects/${project.id}`}>
-						<h3 className='font-bold font-mono text-lg'>{project.title}</h3>
+						<h3 className='font-bold font-mono text-lg'>{project?.name}</h3>
 						<p className='flex flex-col'>
 							<small> {render_data(project.createdAt)}</small>
 						</p>

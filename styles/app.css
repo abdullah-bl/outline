@@ -3,6 +3,7 @@
 @tailwind utilities;
 
 
+
 @layer base {
   html {
     @apply max-h-screen text-base antialiased;
@@ -35,6 +36,7 @@
   /* select {
     @apply w-full px-4 py-2 border border-gray-200 rounded outline-none text-primary bg-gray-1000 bg-opacity-5 hover:bg-opacity-10 focus:border-gray-1000 focus:outline-none focus:ring-0 dark:border-gray-800 dark:bg-white dark:focus:border-gray-600;
   } */
+
 
   button:focus,
   a:focus {
@@ -84,4 +86,10 @@
       background-size: 16px 16px;
     }
   }
+}
+
+
+
+nav > ::-webkit-scrollbar {
+  display: none;
 }

@@ -61,6 +61,22 @@ const getStatus = (): Prisma.StatusCreateInput[] => {
   ]
 }
 
+// const getDurations = (): Prisma.DurationCreateInput[] => {
+//   return [
+//     {
+//       id: '1',
+//       value: '180 day',
+//     },
+//     {
+//       id: '2',
+//       value: '360 day',
+//     },
+//     {
+//       id: '3',
+//       value: '720 day',
+//     }
+//   ]
+// }
 
 
 async function seed() {

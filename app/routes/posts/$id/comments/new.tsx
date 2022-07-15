@@ -30,6 +30,10 @@ export default function NewComment() {
 					Content
 				</label>
 				<textarea
+					autoCapitalize='true'
+					autoComplete='true'
+					autoCorrect='true'
+					autoFocus
 					id='content'
 					name='content'
 					placeholder='wite post title here...'

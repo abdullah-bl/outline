@@ -2,10 +2,9 @@ import type { Project } from '@prisma/client'
 import { DimensionsIcon } from '@radix-ui/react-icons'
 import type { LoaderFunction } from '@remix-run/node'
 import { json } from '@remix-run/node'
-import { Link, Outlet, useLoaderData } from '@remix-run/react'
+import { Outlet, useLoaderData } from '@remix-run/react'
 import { LinkButton } from '~/components/buttons'
 import { Container } from '~/components/container'
-import Navbar from '~/components/navbar'
 import Projects from '~/components/projects'
 import { Heading } from '~/components/text'
 import { db } from '~/utils/db.server'
@@ -24,28 +23,25 @@ export default function Index() {
 	const projects = useLoaderData<LoaderData>()
 	console.log(projects)
 	return (
-		<>
-			<Navbar />
-			<Container>
-				<Heading>
-					<DimensionsIcon /> Projects
-				</Heading>
-				<small className='font-mono font-semibold'>
-					All Your Project & Sorted By Date
-				</small>
-				<div className='flex items-center gap-2 my-4'>
-					<LinkButton to='/projects/new'>Create a new project</LinkButton>
+		<Container>
+			<Heading>
+				<DimensionsIcon /> Projects
+			</Heading>
+			<small className='font-mono font-semibold'>
+				All Your Project & Sorted By Date
+			</small>
+			<div className='flex items-center gap-2 my-4'>
+				<LinkButton to='/projects/new'>Create a new project</LinkButton>
+			</div>
+			<hr />
+			<div className='flex items-baseline gap-2'>
+				<div className='w-1/5'>
+					<Projects projects={projects} />
 				</div>
-				<hr />
-				<div className='flex items-baseline gap-2'>
-					<div className='w-1/5'>
-						<Projects projects={projects} />
-					</div>
-					<div className='flex-1 w-full h-full'>
-						<Outlet />
-					</div>
+				<div className='flex-1 w-full h-full'>
+					<Outlet />
 				</div>
-			</Container>
-		</>
+			</div>
+		</Container>
 	)
 }

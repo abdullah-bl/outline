@@ -13,12 +13,13 @@
     "seed": "node --require esbuild-register prisma/seed.ts"
   },
   "dependencies": {
-    "@prisma/client": "latest",
+    "@prisma/client": "^4.0.0",
     "@radix-ui/react-icons": "latest",
     "@remix-run/node": "latest",
     "@remix-run/react": "latest",
     "@remix-run/serve": "latest",
     "date-fns": "^2.28.0",
+    "nedb": "^1.8.0",
     "react": "latest",
     "react-dom": "latest"
   },

@@ -15,7 +15,7 @@ import Header from './components/header'
 
 export const meta: MetaFunction = () => ({
 	charset: 'utf-8',
-	title: 'New Remix App',
+	title: 'Outline | Made By Abdullah Bl',
 	viewport: 'width=device-width,initial-scale=1',
 })
 
@@ -30,7 +30,7 @@ export default function App() {
 				<Meta />
 				<Links />
 			</head>
-			<body className='w-screen h-screen '>
+			<body className=''>
 				<Header />
 				<Outlet />
 				<ScrollRestoration />
@@ -42,7 +42,9 @@ export default function App() {
 }
 
 export function ErrorBoundary({ error }: { error: Error }) {
+	const caught = useCatch()
 	console.error(error)
+	console.error(caught)
 	return (
 		<html>
 			<head>
@@ -52,7 +54,15 @@ export function ErrorBoundary({ error }: { error: Error }) {
 			</head>
 			<body className='h-screen w-screen overflow-hidden'>
 				{/* add the UI you want your users to see */}
-				<h1>Ops</h1>
+				<div className='flex flex-col items-center justify-center h-screen'>
+					<img src='/images/office.svg' alt='ops' className='w-1/2 h-1/2' />
+					<h1 className='font-bold  text-3xl'>Ops</h1>
+					<h1 className=' font-semibold '>Something went wrong...</h1>
+					<p className='text-center text-blue-700 font-bold'>
+						<a href='/'>Go back to the homepage</a>
+					</p>
+					<pre>{JSON.stringify(error, null, 2)}</pre>
+				</div>
 				<Scripts />
 			</body>
 		</html>

@@ -10,13 +10,38 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Category {
-  id          String   @id @default(uuid())
+// settings
+model Setting {
+  id    String @id @default(cuid())
+  name  String @unique
+  value String
+
+  @@index([name])
+}
+
+model Year {
+  id      String  @id @default(cuid())
+  value   String  @unique @default("2021/2022") // 2021/2022 is the default value
+  default Boolean @default(false) // default year is the year that is used when no year is specified
+
+  chapter  Chapter[]
+  items    Item[]
+  projects Project[]
+  @@index([value])
+}
+
+//
+model Chapter {
+  id          String  @id @default(uuid())
   title       String
   description String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @default(now())
-  items       Item[]
+  year        Year    @relation(fields: [yearId], references: [id])
+  yearId      String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  items Item[]
 
   @@index([title])
 }
@@ -24,59 +49,76 @@ model Category {
 model Item {
   id          String   @id @default(uuid())
   title       String
+  slug        String?
   description String?
-  number      String
-  budget      Int      @default(0)
-  cash        Int      @default(0)
-  cost        Int      @default(0)
+  budget      Int      @default(0) //total budget for this item
+  cash        Int      @default(0) //total cash for this item
+  cost        Int      @default(0) //total cost for this item
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  category    Category @relation(fields: [categoryId], references: [id])
-  categoryId  String
+
+  chapter    Chapter   @relation(fields: [chapterId], references: [id])
+  chapterId  String
+  duration   Duration? @relation(fields: [durationId], references: [id]) //duration of this item in chapter
+  durationId String?
+  type       Type?     @relation(fields: [typeId], references: [id]) // type of this item
+  typeId     String?
+  year       Year?     @relation(fields: [yearId], references: [id])
+  yearId     String?
 
   projects Project[]
   history  ItemHistory[]
 
-  @@index([title, number])
+  @@index([title, slug])
 }
 
 model ItemHistory {
-  id          String   @id @default(uuid())
-  itemId      String
-  item        Item     @relation(fields: [itemId], references: [id])
-  statusId    String
-  status      Status   @relation(fields: [statusId], references: [id])
-  description String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        String   @id @default(uuid())
+  note      String?
+  itemId    String
+  item      Item     @relation(fields: [itemId], references: [id])
+  statusId  String
+  status    Status   @relation(fields: [statusId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([itemId, statusId])
 }
 
 model Project {
-  id          String           @id @default(uuid())
-  title       String
+  id          String    @id @default(uuid())
+  name        String
+  slug        String?   @unique
   description String?
-  cost        Int              @default(0)
-  item        Item?            @relation(fields: [itemId], references: [id])
-  itemId      String?
-  createdAt   DateTime         @default(now())
-  updatedAt   DateTime         @updatedAt
-  history     ProjectHistory[]
-  documents   Document[]
+  budget      Int       @default(0)
+  startDate   DateTime?
+  endDate     DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 
-  @@index([title])
+  item       Item      @relation(fields: [itemId], references: [id])
+  itemId     String
+  duration   Duration? @relation(fields: [durationId], references: [id])
+  durationId String?
+  year       Year?     @relation(fields: [yearId], references: [id])
+  yearId     String?
+
+  history   ProjectHistory[]
+  documents Document[]
+
+  @@index([name, slug])
 }
 
 model ProjectHistory {
-  id          String   @id @default(uuid())
-  project     Project  @relation(fields: [projectId], references: [id])
-  projectId   String
-  statusId    String
-  status      Status   @relation(fields: [statusId], references: [id])
-  description String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        String   @id @default(uuid())
+  note      String?
+  value     Int?     @default(0)
+  project   Project  @relation(fields: [projectId], references: [id])
+  projectId String
+  status    Status   @relation(fields: [statusId], references: [id])
+  statusId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([projectId, statusId])
 }
@@ -84,7 +126,8 @@ model ProjectHistory {
 model Status {
   id          String   @id @default(uuid())
   title       String   @unique
-  description String   @default("")
+  description String?
+  value       Int?     @default(0)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
@@ -92,6 +135,37 @@ model Status {
   items    ItemHistory[]
 
   @@index([title])
+}
+
+model Transfer {
+  id        String   @id @default(uuid())
+  cash      Int      @default(0)
+  cost      Int      @default(0)
+  quarter   Int      @default(1)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  from      String?  @default("")
+  to        String
+
+  @@index([from, to, quarter])
+}
+
+model Duration {
+  id       String    @id @default(uuid())
+  value    String    @unique // e.g. "1 week" or "1 month" or "1 year"
+  items    Item[]
+  projects Project[]
+
+  @@index([value])
+}
+
+// item types && project types
+model Type {
+  id    String @id @default(uuid())
+  value String @unique
+  items Item[]
+
+  @@index([value])
 }
 
 model User {
@@ -103,7 +177,7 @@ model User {
   updatedAt DateTime   @default(now())
   posts     Post[]
   comments  Comment[]
-  Document  Document[]
+  document  Document[]
 }
 
 model Post {
@@ -134,26 +208,13 @@ model Document {
   id        String   @id @default(uuid())
   title     String
   content   String?
-  file      String?
+  url       String?
   authorId  String?
   author    User?    @relation(fields: [authorId], references: [id])
-  Project   Project? @relation(fields: [projectId], references: [id])
+  project   Project? @relation(fields: [projectId], references: [id])
   projectId String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([title, projectId])
-}
-
-model Transfer {
-  id        String   @id @default(uuid())
-  cash      Int      @default(0)
-  cost      Int      @default(0)
-  quarter   Int      @default(1)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  from      String
-  to        String
-
-  @@index([from, to, quarter])
 }

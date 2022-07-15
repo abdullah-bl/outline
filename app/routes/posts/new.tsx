@@ -10,7 +10,14 @@ export const action: ActionFunction = async ({ request }) => {
 	const title = body.get('title') as string
 	const content = body.get('content') as string
 	const pinned = (body.get('pinned') as string) === 'on' ? true : false
-	const post = await db.post.create({ data: { title, content, pinned } })
+	const post = await db.post.create({
+		data: {
+			title,
+			content,
+			pinned,
+		},
+	})
+
 	return redirect(`/posts/${post.id}`)
 }
 
