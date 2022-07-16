@@ -18,16 +18,9 @@ export const loader: LoaderFunction = async (): Promise<DataLoader> => {
 }
 
 export default function Index() {
-	const { posts } = useLoaderData<DataLoader>()
 	return (
-		<Container>
-			<Heading>All Posts</Heading>
-			<div className='my-4'>
-				<LinkButton to='/posts/new'>Write New Post</LinkButton>
-			</div>
-			<div className='w-full overflow-scroll h-full scroll-smooth'>
-				<Posts posts={posts} />
-			</div>
-		</Container>
+		<div className='my-4'>
+			<h1> Details </h1>
+		</div>
 	)
 }

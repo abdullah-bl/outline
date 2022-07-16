@@ -4,8 +4,8 @@ import { json } from '@remix-run/node'
 import { Link, Outlet, useLoaderData, useLocation } from '@remix-run/react'
 import { db } from '~/utils/db.server'
 
-const getLoaderData = async (categoryId: string): Promise<Item[]> =>
-	await db.item.findMany({ where: { categoryId } })
+const getLoaderData = async (chapterId: string): Promise<Item[]> =>
+	await db.item.findMany({ where: { chapterId } })
 
 type LoaderData = Awaited<ReturnType<typeof getLoaderData>>
 
@@ -36,7 +36,7 @@ const RenderItems = ({ items }: { items: Item[] }) => {
 					items.map((item) => (
 						<div key={item.id} className='border rounded-lg p-2'>
 							<h2 className='font-bold'>
-								title : {item.title} ({item.number})
+								title : {item.title} ({item.slug})
 							</h2>
 							<h2>budget: {item.budget}</h2>
 							<h2>cash: {item.cash}</h2>

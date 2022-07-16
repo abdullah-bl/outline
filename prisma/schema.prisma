@@ -21,7 +21,7 @@ model Setting {
 
 model Year {
   id      String  @id @default(cuid())
-  value   String  @unique @default("2021/2022") // 2021/2022 is the default value
+  value   String  @unique @default("2023") // 2023 is the default value
   default Boolean @default(false) // default year is the year that is used when no year is specified
 
   chapter  Chapter[]

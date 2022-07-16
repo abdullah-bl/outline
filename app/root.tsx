@@ -30,9 +30,11 @@ export default function App() {
 				<Meta />
 				<Links />
 			</head>
-			<body className=''>
-				<Header />
-				<Outlet />
+			<body className='w-screen h-screen'>
+				<main className='flex flex-col gap-1 w-screen h-screen overflow-scroll'>
+					<Header />
+					<Outlet />
+				</main>
 				<ScrollRestoration />
 				<Scripts />
 				<LiveReload />

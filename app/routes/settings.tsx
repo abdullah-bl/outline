@@ -1,23 +1,38 @@
-import { GearIcon } from '@radix-ui/react-icons'
-import { Link, Outlet } from '@remix-run/react'
+import { GearIcon, InfoCircledIcon } from '@radix-ui/react-icons'
+import { Link, Outlet, useLocation } from '@remix-run/react'
 import { Container } from '~/components/container'
-import { Heading } from '~/components/text'
+import {
+	ListItemLink,
+	ListView,
+	ListViewDetails,
+	ListViewItem,
+	ListViewLayout,
+} from '~/components/listview'
 
 export default function Settings() {
+	const { pathname } = useLocation()
 	return (
-		<Container>
-			<Heading>
-				<GearIcon width={22} height={22} /> Settings
-			</Heading>
-			<div className='flex gap-1 items-baseline'>
-				<div className='w-1/5 p-2'>
-					<h2> Important Links .. </h2>
-					<Link to={'/settings/me'}> About Me </Link>
-				</div>
-				<div className='flex-1 h-full w-full'>
-					<Outlet />
-				</div>
-			</div>
-		</Container>
+		<ListViewLayout title='Settings'>
+			<ListView>
+				<ListItemLink to='.' active={pathname === '/settings'}>
+					<ListViewItem className='flex items-center gap-2 justify-between'>
+						General
+						<GearIcon />
+					</ListViewItem>
+				</ListItemLink>
+				<ListItemLink to='./me' active={pathname.endsWith('me')}>
+					<ListViewItem className='flex items-center gap-2 justify-between'>
+						About Me
+						<InfoCircledIcon />
+					</ListViewItem>
+				</ListItemLink>
+				<Link to='/settings/me'>
+					<ListViewItem>Me</ListViewItem>
+				</Link>
+			</ListView>
+			<ListViewDetails>
+				<Outlet />
+			</ListViewDetails>
+		</ListViewLayout>
 	)
 }

@@ -19,7 +19,7 @@ export const PostComponent = ({ post }: { post: Post }) => {
 			</h3>
 			<p
 				className={`w-full min-h-8 h-auto relative ${
-					showContent ? '' : 'text-ellipsis max-h-32 overflow-hidden'
+					showContent ? '' : 'text-ellipsis whitespace-nowrap overflow-hidden'
 				}`}
 			>
 				{post.content}

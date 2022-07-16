@@ -13,7 +13,7 @@ export default function Navbar() {
 	const { pathname } = useLocation()
 	return (
 		<nav className='w-full'>
-			<ul className='flex space-x-4 overflow-x-scroll'>
+			<ul className='flex space-x-4 py-2 overflow-x-scroll'>
 				<NavbarItem
 					active={pathname === '/'}
 					to='/'

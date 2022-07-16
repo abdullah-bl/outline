@@ -81,9 +81,6 @@ const getStatus = (): Prisma.StatusCreateInput[] => {
 
 async function seed() {
   await Promise.all([
-    getStatus().map(s => {
-      return db.status.create({ data: s })
-    }),
     getPosts().map((post) => {
       return db.post.create({ data: post })
     }),
