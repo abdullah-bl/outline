@@ -2,7 +2,8 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch"]
 }
 
 datasource db {
@@ -10,103 +11,63 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// settings
-model Setting {
-  id    String @id @default(cuid())
-  name  String @unique
-  value String
+model Budget {
+  id        String    @id @default(cuid())
+  year      Int       @default(2022) // on which year 
+  cash      Int       @default(0)
+  cost      Int       @default(0)
+  start     DateTime?
+  end       DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 
-  @@index([name])
+  itemId String
+  item   Item   @relation(fields: [itemId], references: [id])
+
+  @@index([itemId, year])
 }
 
-model Year {
-  id      String  @id @default(cuid())
-  value   String  @unique @default("2023") // 2023 is the default value
-  default Boolean @default(false) // default year is the year that is used when no year is specified
-
-  chapter  Chapter[]
-  items    Item[]
-  projects Project[]
-  @@index([value])
-}
-
-//
-model Chapter {
-  id          String  @id @default(uuid())
-  title       String
-  description String?
-  year        Year    @relation(fields: [yearId], references: [id])
-  yearId      String
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
-
-  items Item[]
-
-  @@index([title])
-}
-
+// 
 model Item {
-  id          String   @id @default(uuid())
+  id          String   @id @default(cuid())
   title       String
-  slug        String?
+  slug        String
   description String?
-  budget      Int      @default(0) //total budget for this item
-  cash        Int      @default(0) //total cash for this item
-  cost        Int      @default(0) //total cost for this item
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  chapter    Chapter   @relation(fields: [chapterId], references: [id])
-  chapterId  String
-  duration   Duration? @relation(fields: [durationId], references: [id]) //duration of this item in chapter
-  durationId String?
-  type       Type?     @relation(fields: [typeId], references: [id]) // type of this item
-  typeId     String?
-  year       Year?     @relation(fields: [yearId], references: [id])
-  yearId     String?
+  type   Type?   @relation(fields: [typeId], references: [id]) // type of this item
+  typeId String?
 
-  projects Project[]
-  history  ItemHistory[]
+  projects  Project[]
+  trensform Transfer[]
+  budgets   Budget[]
 
   @@index([title, slug])
 }
 
-model ItemHistory {
-  id        String   @id @default(uuid())
-  note      String?
-  itemId    String
-  item      Item     @relation(fields: [itemId], references: [id])
-  statusId  String
-  status    Status   @relation(fields: [statusId], references: [id])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([itemId, statusId])
-}
-
 model Project {
-  id          String    @id @default(uuid())
+  id          String    @id @default(cuid())
   name        String
-  slug        String?   @unique
+  slug        String?   @unique // tender number from etimad 
+  reference   String?   @unique // refrence id from etimad
   description String?
-  budget      Int       @default(0)
-  startDate   DateTime?
-  endDate     DateTime?
+  duration    String? // duration of this project in ex: "1 year",
+  active      Boolean   @default(false)
+  estimated   Int       @default(0) // estimated cost of this project
+  cost        Int?      @default(0) // real cost for this project
+  start       DateTime?
+  end         DateTime?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 
-  item       Item      @relation(fields: [itemId], references: [id])
-  itemId     String
-  duration   Duration? @relation(fields: [durationId], references: [id])
-  durationId String?
-  year       Year?     @relation(fields: [yearId], references: [id])
-  yearId     String?
+  item   Item   @relation(fields: [itemId], references: [id]) // on which item this project is based on
+  itemId String
 
   history   ProjectHistory[]
   documents Document[]
 
-  @@index([name, slug])
+  @@index([name, slug, reference])
 }
 
 model ProjectHistory {
@@ -124,44 +85,36 @@ model ProjectHistory {
 }
 
 model Status {
-  id          String   @id @default(uuid())
+  id          String   @id @default(cuid())
   title       String   @unique
   description String?
-  value       Int?     @default(0)
+  value       Int?     @default(0) // represante 0%, 10%, 20%
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
   projects ProjectHistory[]
-  items    ItemHistory[]
 
   @@index([title])
 }
 
 model Transfer {
-  id        String   @id @default(uuid())
-  cash      Int      @default(0)
-  cost      Int      @default(0)
+  id        String   @id @default(cuid())
+  cash      Int      @default(0) // + | - 
+  cost      Int      @default(0) // + | -
   quarter   Int      @default(1)
+  year      Int      @default(2022)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  from      String?  @default("")
-  to        String
 
-  @@index([from, to, quarter])
-}
+  itemId String
+  item   Item   @relation(fields: [itemId], references: [id])
 
-model Duration {
-  id       String    @id @default(uuid())
-  value    String    @unique // e.g. "1 week" or "1 month" or "1 year"
-  items    Item[]
-  projects Project[]
-
-  @@index([value])
+  @@index([quarter, itemId])
 }
 
 // item types && project types
 model Type {
-  id    String @id @default(uuid())
+  id    String @id @default(cuid())
   value String @unique
   items Item[]
 
@@ -169,7 +122,7 @@ model Type {
 }
 
 model User {
-  id        String     @id @default(uuid())
+  id        String     @id @default(cuid())
   name      String
   username  String     @unique
   password  String?
@@ -178,13 +131,15 @@ model User {
   posts     Post[]
   comments  Comment[]
   document  Document[]
+  Task      Task[]
 }
 
 model Post {
-  id        String    @id @default(uuid())
+  id        String    @id @default(cuid())
   title     String
   content   String
   pinned    Boolean   @default(false)
+  published Boolean   @default(false)
   authorId  String?
   author    User?     @relation(fields: [authorId], references: [id])
   createdAt DateTime  @default(now())
@@ -193,7 +148,7 @@ model Post {
 }
 
 model Comment {
-  id        String   @id @default(uuid())
+  id        String   @id @default(cuid())
   pinned    Boolean? @default(false)
   content   String
   authorId  String?
@@ -205,7 +160,7 @@ model Comment {
 }
 
 model Document {
-  id        String   @id @default(uuid())
+  id        String   @id @default(cuid())
   title     String
   content   String?
   url       String?
@@ -217,4 +172,19 @@ model Document {
   updatedAt DateTime @updatedAt
 
   @@index([title, projectId])
+}
+
+// task
+model Task {
+  id        String   @id @default(cuid())
+  title     String
+  content   String?
+  completed Boolean? @default(false)
+  public    Boolean? @default(false)
+  authorId  String?
+  author    User?    @relation(fields: [authorId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([title])
 }

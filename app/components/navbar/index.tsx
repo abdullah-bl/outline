@@ -5,6 +5,7 @@ import {
 	BookmarkIcon,
 	StackIcon,
 	GearIcon,
+	FileTextIcon,
 } from '@radix-ui/react-icons'
 import { useLocation } from '@remix-run/react'
 import { NavbarItem } from './NavbarItem'
@@ -27,10 +28,16 @@ export default function Navbar() {
 					label={'Posts'}
 				/>
 				<NavbarItem
-					active={pathname.includes('/chapters')}
-					to='/chapters'
+					active={pathname.includes('/tasks')}
+					to='/tasks'
+					icon={<FileTextIcon />}
+					label={'Tasks'}
+				/>
+				<NavbarItem
+					active={pathname.includes('/items')}
+					to='/items'
 					icon={<StackIcon />}
-					label={'Chapters'}
+					label={'Items'}
 				/>
 				<NavbarItem
 					active={pathname.includes('/projects')}

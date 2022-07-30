@@ -35,7 +35,7 @@ export default function Index() {
 			<Heading>Welcome to Outline</Heading>
 			<small className='font-mono'> News & Important </small>
 
-			<div className='flex items-baseline gap-2 flex-wrap'>
+			<div className='flex items-baseline gap-2 flex-wrap h-full overflow-scroll'>
 				<div className='sm:w-1/2 md:w-1/2'>
 					{/* render latest posts */}
 					<Heading className='font-bold text-xl font-mono border-t-2 border-gray-900'>

@@ -7,7 +7,7 @@ import {
 	ListViewDetails,
 	ListViewItem,
 	ListViewLayout,
-} from '~/components/listview'
+} from '~/components/listView'
 
 export default function Settings() {
 	const { pathname } = useLocation()
@@ -26,9 +26,6 @@ export default function Settings() {
 						<InfoCircledIcon />
 					</ListViewItem>
 				</ListItemLink>
-				<Link to='/settings/me'>
-					<ListViewItem>Me</ListViewItem>
-				</Link>
 			</ListView>
 			<ListViewDetails>
 				<Outlet />

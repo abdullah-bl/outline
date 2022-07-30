@@ -43,4 +43,4 @@ export const ListItemLink: React.FC<{
 
 export const ListViewDetails = (
 	props: React.HtmlHTMLAttributes<HTMLDivElement>
-) => <div className='w-full overflow-scroll' {...props} />
+) => <div className='w-full h-full overflow-scroll' {...props} />

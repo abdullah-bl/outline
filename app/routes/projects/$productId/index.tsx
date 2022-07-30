@@ -10,7 +10,7 @@ const getProject = async (id: string): Promise<Project | null> =>
 	await db.project.findUnique({ where: { id } })
 
 export const loader: LoaderFunction = async ({ params }) => {
-	return json<LoaderData>(await getProject(params.id as string))
+	return json<LoaderData>(await getProject(params.productId as string))
 }
 
 export default function ProjectDetails() {
@@ -18,7 +18,10 @@ export default function ProjectDetails() {
 	console.log(project)
 	return (
 		<>
-			<h1> Details </h1>
+			<h1> Details for {project?.name} </h1>
+
+			<hr />
+			<h2> history </h2>
 		</>
 	)
 }

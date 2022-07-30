@@ -1,7 +1,7 @@
 import type { Post } from '@prisma/client'
 import { DrawingPinFilledIcon, PinTopIcon } from '@radix-ui/react-icons'
 import { useLocation } from '@remix-run/react'
-import { ListItemLink, ListViewItem } from '../listview'
+import { ListItemLink, ListViewItem } from '../listView'
 import { PostComponent } from './post'
 
 export const PostsList = ({ posts }: { posts: Post[] }) => {

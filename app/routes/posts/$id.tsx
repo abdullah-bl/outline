@@ -1,10 +1,7 @@
-import type { Post } from '@prisma/client'
 import type { LoaderFunction } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
-import { Link, Outlet, useLoaderData, useLocation } from '@remix-run/react'
+import { Outlet, useLoaderData, useLocation } from '@remix-run/react'
 import { LinkButton } from '~/components/buttons'
-import { Container } from '~/components/container'
-import Navbar from '~/components/navbar'
 import { formatDate, formatPastToNow } from '~/lib/formatDate'
 import { db } from '~/utils/db.server'
 
@@ -30,7 +27,7 @@ export default function PostId() {
 				<div>
 					<small className='font-mono'>
 						Created At : {post && formatDate(post?.createdAt)}(
-						{post && formatPastToNow(post?.createdAt)})
+						{post && formatPastToNow(post?.updatedAt)})
 					</small>
 				</div>
 			</div>

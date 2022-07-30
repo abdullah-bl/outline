@@ -10,9 +10,7 @@ import { Heading } from '~/components/text'
 import { db } from '~/utils/db.server'
 
 const getProjects = async (): Promise<Project[]> =>
-	await db.project.findMany({
-		orderBy: { createdAt: 'desc' },
-	})
+	await db.project.findMany({})
 type LoaderData = Awaited<ReturnType<typeof getProjects>>
 
 export const loader: LoaderFunction = async () => {
@@ -21,7 +19,6 @@ export const loader: LoaderFunction = async () => {
 
 export default function Index() {
 	const projects = useLoaderData<LoaderData>()
-	console.log(projects)
 	return (
 		<>
 			<h1> Details </h1>
