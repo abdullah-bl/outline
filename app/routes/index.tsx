@@ -1,38 +1,43 @@
-import type { Post } from '@prisma/client'
-import type { LoaderFunction } from '@remix-run/node'
+import type { Post, Task } from '@prisma/client'
+import type { LoaderFunction } from '@remix-run/node';
+import { json } from '@remix-run/node'
 import { Link, useLoaderData } from '@remix-run/react'
 import { Container } from '~/components/container'
+import Summary from '~/components/home/summary';
 import Posts from '~/components/posts'
 import { Heading } from '~/components/text'
 import { db } from '~/utils/db.server'
 
-type DataLoader = {
-	posts: Awaited<Post[]>
-	count: Awaited<number>
-}
-
-export const loader: LoaderFunction = async (): Promise<DataLoader> => {
-	const posts = await db.post.findMany({
-		orderBy: {
-			createdAt: 'desc',
-		},
-		include: {
-			comments: {
-				select: {
-					id: true,
+const getSummary = async (): Promise<{ posts: Post[], tasks: Task[] }> => { 
+		return {
+			posts: await db.post.findMany({
+				where: { published: true },
+				orderBy: {
+					createdAt: 'desc',
 				},
-			},
-		},
-	})
-	const count = await db.post.count()
-	return { posts, count }
-}
+			}), 
+			tasks: await db.task.findMany({
+				where: { public: true },
+				orderBy: {
+					createdAt: 'desc',
+				},
+			})
+		}
+	}
+
+type LoaderData = Awaited<ReturnType<typeof getSummary>>
+
+export const loader: LoaderFunction = async () => json<LoaderData>(await getSummary())
+
 
 export default function Index() {
-	const { posts, count } = useLoaderData<DataLoader>()
+	const { posts, tasks } = useLoaderData<LoaderData>()
+	console.log(posts, tasks)
 	return (
 		<Container>
 			<Heading>Welcome to Outline</Heading>
+			<Summary posts={posts} tasks={tasks} />
+
 			<small className='font-mono'> News & Important </small>
 
 			<div className='flex items-baseline gap-2 flex-wrap h-full overflow-scroll'>
@@ -50,16 +55,6 @@ export default function Index() {
 						</Link>
 					</div>
 					<Posts posts={posts} />
-					{count > 4 && (
-						<p className='font-mono'>
-							<Link
-								to={'/posts'}
-								className='font-mono font-bold text-blue-800 dark:text-white'
-							>
-								See all posts
-							</Link>
-						</p>
-					)}
 				</div>
 				<div className='w-1/2'>{/* render top projects... */}</div>
 			</div>
